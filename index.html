@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6d5dfc">
+  <title>ProjectHub – Buy &amp; Sell Projects</title>
+  <meta name="description" content="A global marketplace to discover, buy and sell websites, apps, source code, designs, courses and business projects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header glass">
+  <a class="brand" href="#"><span class="logo-mark"><i class="fa-solid fa-cubes"></i></span> ProjectHub</a>
+  <div class="search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input id="searchInput" type="search" data-i18n-ph="searchPlaceholder" autocomplete="off">
+  </div>
+  <div class="head-actions">
+    <button id="sellBtn" class="btn primary"><i class="fa-solid fa-plus"></i> <span data-i18n="sell"></span></button>
+    <select id="langSelect" class="lang" aria-label="Language">
+      <option value="ar">🇲🇦 AR</option><option value="en">🇺🇸 EN</option><option value="fr">🇫🇷 FR</option>
+      <option value="es">🇪🇸 ES</option><option value="de">🇩🇪 DE</option><option value="zh">🇨🇳 ZH</option>
+    </select>
+    <button id="themeBtn" class="icon-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+    <div class="me-avatar" title="Me">Y</div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <h1 data-i18n="heroTitle"></h1>
+  <p data-i18n="heroSub"></p>
+  <div class="hero-stats">
+    <div><strong id="stProjects">0</strong><span data-i18n="statProjects"></span></div>
+    <div><strong id="stCreators">0</strong><span data-i18n="statCreators"></span></div>
+    <div><strong id="stSales">0</strong><span data-i18n="statSales"></span></div>
+  </div>
+</section>
+
+<!-- ============ MARKETPLACE ============ -->
+<main class="layout">
+  <div id="sheetBackdrop" class="sheet-backdrop"></div>
+  <aside id="sidebar" class="sidebar">
+    <div class="side-head">
+      <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="filters"></span></h3>
+      <button id="resetBtn" class="link" data-i18n="reset"></button>
+    </div>
+    <div class="f-group"><h4 data-i18n="projectType"></h4><div id="typeChecks" class="checks"></div></div>
+    <div class="f-group"><h4><span data-i18n="priceRange"></span>: <output id="priceOut">$1000</output></h4>
+      <input id="priceRange" type="range" min="0" max="1000" step="10" value="1000"></div>
+    <div class="f-group"><h4 data-i18n="minRating"></h4><select id="ratingSel"></select></div>
+    <div class="f-group"><h4 data-i18n="projLang"></h4><select id="projLangSel"></select></div>
+    <button id="applyBtn" class="btn primary block sheet-only" data-i18n="showResults"></button>
+  </aside>
+
+  <section class="main">
+    <div class="toolbar">
+      <span id="count" class="muted"></span>
+      <div class="tool-right">
+        <button id="savedBtn" class="chip"><i class="fa-solid fa-heart"></i> <span data-i18n="saved"></span> <b id="savedN">0</b></button>
+        <select id="sortSel" aria-label="Sort"></select>
+        <button id="filterBtn" class="btn ghost sheet-only"><i class="fa-solid fa-sliders"></i> <span data-i18n="filters"></span></button>
+      </div>
+    </div>
+    <div id="grid" class="grid"></div>
+    <div class="center"><button id="moreBtn" class="btn ghost" data-i18n="loadMore"></button></div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="foot-grid">
+    <div><a class="brand" href="#"><span class="logo-mark"><i class="fa-solid fa-cubes"></i></span> ProjectHub</a>
+      <p class="muted" data-i18n="footTag"></p></div>
+    <div><h4 data-i18n="fMarket"></h4><a href="#" data-act="focusSearch" data-i18n="browse"></a><a href="#" data-act="sell" data-i18n="sell"></a></div>
+    <div><h4 data-i18n="fSupport"></h4><a href="#" data-i18n="help"></a><a href="#" data-i18n="terms"></a></div>
+    <div><h4 data-i18n="fCompany"></h4><a href="#" data-i18n="about"></a><a href="#" data-i18n="privacy"></a></div>
+  </div>
+  <p class="muted copy">© 2026 ProjectHub · <span data-i18n="rights"></span></p>
+</footer>
+
+<!-- ============ PROJECT DETAIL DRAWER ============ -->
+<div id="drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-bg" data-act="closeDrawer"></div>
+  <section id="drawerPanel" class="drawer-panel"></section>
+</div>
+
+<!-- ============ PUBLISH WIZARD (4 steps) ============ -->
+<div id="pubModal" class="modal hidden" role="dialog" aria-modal="true">
+  <form id="pubForm" class="modal-card wide" novalidate>
+    <div class="modal-top"><h3 data-i18n="publishTitle"></h3><button type="button" class="icon-btn" data-close><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="stepper" class="stepper"></div>
+
+    <div class="step" data-step="1">
+      <p class="muted" data-i18n="stepType"></p>
+      <div id="typeCards" class="type-cards"></div>
+    </div>
+
+    <div class="step hidden" data-step="2">
+      <label><span data-i18n="title"></span><input name="title" maxlength="70"></label>
+      <label><span data-i18n="shortDesc"></span><input name="short" maxlength="120"></label>
+      <label><span data-i18n="fullDesc"></span><textarea name="full" rows="5" placeholder="## Features&#10;- **Fast** setup&#10;- `npm install`"></textarea><small class="muted" data-i18n="mdHint"></small></label>
+      <label><span data-i18n="tagsLbl"></span><input name="tags" placeholder="react, dashboard, ui"></label>
+      <label><span data-i18n="projLang"></span><select name="plang" id="pubLang"></select></label>
+      <div class="field"><span class="lbl" data-i18n="priceLbl"></span>
+        <div class="seg" id="priceSeg">
+          <label><input type="radio" name="priceType" value="free" checked><span data-i18n="free"></span></label>
+          <label><input type="radio" name="priceType" value="paid"><span data-i18n="paid"></span></label>
+          <label><input type="radio" name="priceType" value="sub"><span data-i18n="subscription"></span></label>
+        </div></div>
+      <div id="amountRow" class="row hidden">
+        <label><span data-i18n="amount"></span><input type="number" name="price" min="1" max="100000" value="20"></label>
+        <label><span data-i18n="currency"></span><select name="currency"><option>USD</option><option>MAD</option></select></label>
+      </div>
+    </div>
+
+    <div class="step hidden" data-step="3">
+      <div class="field"><span class="lbl" data-i18n="thumb"></span>
+        <label class="drop"><img id="thumbPrev" class="hidden" alt=""><span id="thumbHint"><i class="fa-solid fa-image"></i> <span data-i18n="chooseImage"></span></span>
+          <input type="file" id="thumbFile" accept="image/*" hidden></label></div>
+      <div class="field"><span class="lbl" data-i18n="gallery"></span>
+        <label class="drop small"><i class="fa-solid fa-images"></i> <span data-i18n="chooseImages"></span><input type="file" id="galFile" accept="image/*" multiple hidden></label>
+        <div id="galPrev" class="gal-prev"></div></div>
+      <label><span data-i18n="demoLink"></span><input name="demo" type="url" placeholder="https://youtube.com/… or https://my-demo.com"></label>
+      <div class="field"><span class="lbl" data-i18n="zipFile"></span>
+        <label class="drop small"><i class="fa-solid fa-file-zipper"></i> <span id="zipName" data-i18n="chooseZip"></span><input type="file" id="zipFile" accept=".zip,.rar,.7z" hidden></label></div>
+    </div>
+
+    <div class="step hidden" data-step="4">
+      <p class="muted" data-i18n="stepContact"></p>
+      <div class="toggle-row"><label class="sw"><input type="checkbox" data-toggle="whatsapp"><i></i></label><i class="fa-brands fa-whatsapp"></i> WhatsApp<input name="whatsapp" class="hidden" placeholder="2126XXXXXXXX"></div>
+      <div class="toggle-row"><label class="sw"><input type="checkbox" data-toggle="email"><i></i></label><i class="fa-solid fa-envelope"></i> Email<input name="email" type="email" class="hidden" placeholder="you@mail.com"></div>
+      <div class="toggle-row"><label class="sw"><input type="checkbox" data-toggle="portfolio"><i></i></label><i class="fa-solid fa-globe"></i> Portfolio<input name="portfolio" type="url" class="hidden" placeholder="https://…"></div>
+      <div class="toggle-row"><label class="sw"><input type="checkbox" data-toggle="github"><i></i></label><i class="fa-brands fa-github"></i> GitHub<input name="github" type="url" class="hidden" placeholder="https://github.com/…"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" id="backBtn" class="btn ghost" data-i18n="back"></button>
+      <button type="button" id="nextBtn" class="btn primary" data-i18n="next"></button>
+      <button type="submit" id="pubBtn" class="btn primary hidden" data-i18n="publish"></button>
+    </div>
+  </form>
+</div>
+
+<!-- ============ BUY OPTIONS ============ -->
+<div id="buyModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-top"><h3 data-i18n="buyTitle"></h3><button type="button" class="icon-btn" data-close><i class="fa-solid fa-xmark"></i></button></div>
+    <button class="opt" data-buy="source"><i class="fa-solid fa-download"></i><div><strong data-i18n="optSource"></strong><span data-i18n="optSourceDesc"></span></div></button>
+    <button class="opt" data-buy="custom"><i class="fa-solid fa-screwdriver-wrench"></i><div><strong data-i18n="optCustom"></strong><span data-i18n="optCustomDesc"></span></div></button>
+    <button class="opt" data-buy="collab"><i class="fa-solid fa-handshake"></i><div><strong data-i18n="optCollab"></strong><span data-i18n="optCollabDesc"></span></div></button>
+  </div>
+</div>
+
+<!-- ============ CONTACT / HIRE / CHAT ============ -->
+<div id="talkModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-top"><h3 id="talkTitle"></h3><button type="button" class="icon-btn" data-close><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="talkLinks" class="talk-links"></div>
+    <div id="chatBox" class="chat"></div>
+    <form id="chatForm" class="chat-form"><input id="chatInput" data-i18n-ph="chatPh" autocomplete="off"><button class="btn primary" data-i18n="send"></button></form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
